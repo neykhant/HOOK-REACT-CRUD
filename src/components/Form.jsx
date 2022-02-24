@@ -1,19 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const Form = ({ inputText, setInputText, setTodos, todos, setStatus }) => {
+const Form = ({ inputText, setInputText, setTodos, todos, setStatus, editInput, setEditInput }) => {
   //you can type js code and function
 
   const inputTextHandler = (e) => {
     setInputText(e.target.value);
   };
 
+//update Todo
+const updateTodo = (text, id) =>{
+  const result = todos.map(el => el.id === id ? {text, id} : el );
+  setTodos(result);
+  setEditInput("");
+}
+
+//useEffect
+useEffect(()=>{
+if(editInput){
+  setInputText(editInput.text)
+}else{
+  setInputText("");
+}
+}, [setInputText, editInput])
+
+
+//submit form
   const submitTodoHandler = (e) => {
     e.preventDefault();
-    setTodos([
-      ...todos,
-      { text: inputText, completed: false, id: Math.random() * 1000 },
-    ]);
-    setInputText("");
+    if(!editInput){
+      setTodos([
+        ...todos,
+        { text: inputText, completed: false, id: Math.random() * 1000 },
+      ]);
+      setInputText("");
+    }else{
+      // console.log("edit")
+      updateTodo(inputText, editInput.id)
+    }
   };
 
   const statusHandler = (e) => {

@@ -1,12 +1,18 @@
 import React from "react";
 
-const Todo = ({ todo, todos, setTodos }) => {
+const Todo = ({ todo, todos, setTodos, editInput, setEditInput }) => {
+
+  // console.log("ok", editInput);
   //Events
   const handleDelete = () => {
-    // console.log(todo)
     setTodos(todos.filter((el) => el.id !== todo.id));
   };
 
+  const handleUpdate = () => {
+    const resultTodo = todos.find(todo => todo.id === todo.id)
+    // console.log("first", resultTodo)
+    setEditInput(resultTodo)
+  }
   const handleComplete = () => {
     setTodos(
       todos.map((item) => {
@@ -29,6 +35,9 @@ const Todo = ({ todo, todos, setTodos }) => {
       </button>
       <button onClick={handleDelete} className="trash-btn">
         <i className="fas fa-trash"></i>
+      </button>
+      <button onClick={handleUpdate} className="pen-btn">
+      <i className="fa-solid fa-pen-to-square"></i>
       </button>
     </div>
   );

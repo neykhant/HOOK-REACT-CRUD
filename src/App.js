@@ -9,49 +9,50 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const [status, setStatus] = useState("all");
   const [filteredTodos, setFilteredTodos] = useState([]);
+  const [editInput, setEditInput] = useState(null);
 
   //useeffetc once time
   useEffect(() => {
     getLocalStorage();
-  }, [])
+  }, []);
 
   //USEEFFECT run every time
-  useEffect(() =>{
+  useEffect(() => {
     filterHandler();
     saveLocalStorage();
-  }, [todos, status])
+  }, [todos, status]);
 
+  //functions
+  const filterHandler = () => {
+    switch (status) {
+      case "completed":
+        setFilteredTodos(todos.filter((todo) => todo.completed === true));
+        break;
+      case "uncompleted":
+        setFilteredTodos(todos.filter((todo) => todo.completed === false));
+        break;
+      default:
+        setFilteredTodos(todos);
+        break;
+    }
+  };
 
-//functions
-const filterHandler = () =>{
-  switch(status){
-    case "completed":
-      setFilteredTodos(todos.filter( todo => todo.completed === true));
-      break;
-    case "uncompleted":
-      setFilteredTodos(todos.filter(todo => todo.completed === false));
-      break;
-    default:
-      setFilteredTodos(todos);
-      break;
-  }
-}
-
-//save local
-const saveLocalStorage = () => {
+  //save local
+  const saveLocalStorage = () => {
     localStorage.setItem("todos", JSON.stringify(todos));
-}
+  };
 
-//get local
-const getLocalStorage = () => {
-  if(localStorage.getItem("todos") === null){
-    localStorage.setItem("todos", JSON.stringify([]));
-  }else{
-    const todoLocal = JSON.parse(localStorage.getItem('todos'));
-    setTodos(todoLocal);
-  }
-}
+  //get local
+  const getLocalStorage = () => {
+    if (localStorage.getItem("todos") === null) {
+      localStorage.setItem("todos", JSON.stringify([]));
+    } else {
+      const todoLocal = JSON.parse(localStorage.getItem("todos"));
+      setTodos(todoLocal);
+    }
+  };
 
+  console.log("hello",editInput);
   return (
     <div className="App">
       <header>
@@ -63,8 +64,16 @@ const getLocalStorage = () => {
         setTodos={setTodos}
         todos={todos}
         setStatus={setStatus}
+        editInput={editInput}
+        setEditInput={setEditInput}
       />
-      <TodoList todos={todos} setTodos={setTodos} filteredTodos={filteredTodos} />
+      <TodoList
+        todos={todos}
+        setTodos={setTodos}
+        filteredTodos={filteredTodos}
+        editInput={editInput}
+        setEditInput={setEditInput}
+      />
     </div>
   );
 };
